@@ -1,6 +1,6 @@
 #install.packages('randtoolbox')
 
-library(randtoolbox)
+#library(randtoolbox)
 
 MersenneTwister <- function(n,p=1,graine)
 {
@@ -99,9 +99,9 @@ for (i in 1:100) {
 }
 Frequency(Sobol(1000,1), 32)
 
-hist(a)
-hist(b)
-hist(c)
+#hist(a)
+#hist(b)
+#hist(c)
 
 #print(mean(a))
 #print(mean(b))
@@ -159,7 +159,6 @@ Runs <- function(x,nb)
       r<-r+1
     }
   }
-  print(r)
   #Calcul Pvaleur
   
   PValeur = 2*(1-pnorm((abs(r-2*pi*n*(1-pi)))/(2*sqrt(n)*pi*(1-pi))))
@@ -168,6 +167,9 @@ Runs <- function(x,nb)
   return ( PValeur)
 
 }
+
+# Test Runs
+
 set.seed(200)
 x <- sample.int(100, 100)
 
@@ -180,13 +182,34 @@ for (i in 1:100) {
   b[i] <- Runs( StandardMinimal(1000, x[i]), 32)
   c[i] <- Runs(unlist(MersenneTwister(1000, 1, x[i])), 32)
 }
-Runs(Sobol(1000,1), 32)
+#print(Runs(Sobol(1000,1), 32))
 
-hist(a)
-hist(b)
-hist(c)
+#hist(a)
+#hist(b)
+#hist(c)
+
+#print(mean(a))
+#print(mean(b))
+#print(mean(c))
+
+
+#q5
+
+set.seed(200)
+x <- sample.int(100, 100)
+
+a <- rep(0,100)
+b <- rep(0,100)
+c <- rep(0,100)
+
+for (i in 1:100) {
+  a[i] <- order.test(RANDU(1000, 200), d=4, echo=FALSE)$p.value
+  b[i] <- order.test(StandardMinimal(1000, 200),d=4, echo=FALSE)$p.value
+  c[i] <- order.test(as.vector(MersenneTwister(1000, 1, 200)$x),d=4, echo=FALSE)$p.value
+}
 
 print(mean(a))
 print(mean(b))
 print(mean(c))
+print(order.test(Sobol(1000, 1), d=4, echo = FALSE)$p.value)
 
